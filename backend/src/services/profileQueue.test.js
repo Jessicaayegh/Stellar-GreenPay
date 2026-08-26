@@ -62,8 +62,8 @@ describe("profileQueue badge computation", () => {
       console.log(`Testcontainers PostgreSQL ready at ${host}:${port}`);
     } catch (err) {
       console.warn("Testcontainers startup failed – integration tests will be skipped:", err.message);
-      try { if (testPool) await testPool.end(); } catch { /* best-effort cleanup */ }
-      try { if (container) await container.stop(); } catch { /* best-effort cleanup */ }
+      try { if (testPool) await testPool.end(); } catch { void 0; }
+      try { if (container) await container.stop(); } catch { void 0; }
       container = null;
       testPool = null;
     }
