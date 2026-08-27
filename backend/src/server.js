@@ -18,11 +18,12 @@ const { start: startProfileQueue } = require("./services/profileQueue");
 const { start: startStatsRefreshQueue } = require("./services/statsRefreshQueue");
 const { startIndexer } = require("./services/indexerService");
 const logger = require("./logger");
-const requestLogger = require("./middleware/requestLogger");
 const { createCorsMiddleware, getAllowedOrigins } = require("./middleware/corsPolicy");
+const requestLogger = require("./middleware/requestLogger");
 const { createRateLimiter } = require("./middleware/rateLimiter");
 const projectsRouter = require("./routes/projects");
 const uploadsRouter = require("./routes/uploads");
+const healthRouter = require("./routes/health");
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -118,6 +119,7 @@ const { registerSocketHandlers } = require("./services/socketHandler");
 registerSocketHandlers(io);
 
 app.use(createRateLimiter(150, 15, "global"));
+app.use("/health", healthRouter);
 
 // ── CSRF token endpoint ────────────────────────────────────────────
 function csrfTokenHandler(req, res) {
