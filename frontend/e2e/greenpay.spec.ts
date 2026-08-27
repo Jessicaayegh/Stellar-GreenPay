@@ -84,6 +84,27 @@ async function mockApi(page: Page) {
   await page.route("**/api/**/projects/featured",                  (r) => r.fulfill(ok(MOCK_PROJECT)));
   await page.route(`**/api/**/projects/${MOCK_PROJECT_ID}/**`,     (r) => r.fulfill(ok([])));
   await page.route(new RegExp(`/api/(v1/)?projects/${MOCK_PROJECT_ID}(\\?.*)?$`), (r) => r.fulfill(ok(MOCK_PROJECT)));
+=======
+  await page.route("**/api/v1/impact/**",          (r) => r.fulfill(ok({})));
+  await page.route("**/api/v1/stats/categories",   (r) => r.fulfill(ok([{ category: "Reforestation", count: 1 }])));
+  await page.route("**/api/v1/stats/global",       (r) => r.fulfill(ok({ totalDonations: 1, totalXLMRaised: "100", totalCO2OffsetKg: 1000 })));
+  await page.route("**/api/v1/leaderboard**",      (r) => r.fulfill(ok(MOCK_LEADERBOARD)));
+
+  // Profile, donations, subscriptions, updates.
+  await page.route("**/api/v1/profiles/**",        (r) => r.fulfill(ok({ publicKey: MOCK_PUBLIC_KEY, totalDonatedXLM: "0", projectsSupported: 0, badges: [] })));
+  await page.route("**/api/v1/donations",          (r) => r.fulfill(ok({ id: "d1" })));
+  await page.route("**/api/v1/donations/**",       (r) => r.fulfill(ok([])));
+  await page.route("**/api/v1/subscriptions",      (r) => r.fulfill(okMsg("subscribed")));
+  await page.route("**/api/v1/subscriptions/**",   (r) => r.fulfill({ json: { success: true, count: 0 } }));
+  await page.route("**/api/v1/updates/**",         (r) => r.fulfill(ok([])));
+
+  // Projects (broadest first within this group, then more specific).
+  await page.route("**/api/v1/projects**",                         (r) => r.fulfill(ok([MOCK_PROJECT])));
+  await page.route("**/api/v1/projects",                           (r) => r.fulfill(ok([MOCK_PROJECT])));
+  await page.route("**/api/v1/projects/featured",                  (r) => r.fulfill(ok(MOCK_PROJECT)));
+  await page.route(`**/api/v1/projects/${MOCK_PROJECT_ID}/**`,     (r) => r.fulfill(ok([])));
+  await page.route(`**/api/v1/projects/${MOCK_PROJECT_ID}`,        (r) => r.fulfill(ok(MOCK_PROJECT)));
+>>>>>>> d4fa9168 (ci issues fixed)
 }
 
 /**
