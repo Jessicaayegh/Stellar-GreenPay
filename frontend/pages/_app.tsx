@@ -25,6 +25,17 @@ export default function App({ Component, pageProps }: AppProps) {
     if (pk) setPublicKey(pk);
   };
 
+  useEffect(() => {
+    const ensureTitle = () => {
+      if (!document.title.trim()) document.title = "Stellar GreenPay";
+    };
+
+    ensureTitle();
+    const observer = new MutationObserver(ensureTitle);
+    observer.observe(document.head, { childList: true, subtree: true });
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <ThemeProvider>
       <I18nProvider>
