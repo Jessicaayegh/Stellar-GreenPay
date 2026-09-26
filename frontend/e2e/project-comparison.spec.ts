@@ -98,11 +98,12 @@ test.describe("ProjectComparison modal", () => {
     await page.getByRole("button", { name: /compare selected/i }).click();
     await expect(page.getByRole("heading", { name: /project comparison/i })).toBeVisible();
 
-    await expect(page.getByText(MOCK_PROJECTS[0].name).last()).toBeVisible();
-    await expect(page.getByText(MOCK_PROJECTS[1].name).last()).toBeVisible();
-    await expect(page.getByText("CO2 per XLM")).toBeVisible();
-    await expect(page.getByText("Progress %")).toBeVisible();
-    await expect(page.getByText("Donor count")).toBeVisible();
+    const modal = page.getByRole("dialog");
+    await expect(modal.getByText(MOCK_PROJECTS[0].name)).toBeVisible();
+    await expect(modal.getByText(MOCK_PROJECTS[1].name)).toBeVisible();
+    await expect(modal.getByText(/co.*per.*xlm/i)).toBeVisible();
+    await expect(modal.getByText(/progress %/i)).toBeVisible();
+    await expect(modal.getByText(/donor count/i)).toBeVisible();
   });
 
   test("select 3rd project; assert 4th checkbox is disabled", async ({ page }) => {
